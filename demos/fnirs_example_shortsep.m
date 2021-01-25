@@ -115,7 +115,7 @@ for j=1:length(List)
 end
 
 %% ROC run
-iter=1;
+iter=1000;
 for i=1:length(ROCtest)
     ROCtest(i)=ROCtest(i).run(iter);
 end
@@ -151,13 +151,18 @@ hbSS = job.run(rawSS);
 %First level Stats
 job = nirs.modules.GLM();
     job.AddShortSepRegressors = true;
+    %job.type = '?';
+    job.type = 'AR-IRLS';
 Stats = job.run(hbSS);
+Stats.probe.link
 
 %if you want to use SS as pre-filter for RSFC
 job = advanced.nirs.modules.ShortDistanceFilter();
+job.splittypes = 0; % Do not separate between Oxy and DeOxy
+
 hbSS_Filt = job.run(hbSS)
 
-
+hbSS_Filt.draw
 
 
 
